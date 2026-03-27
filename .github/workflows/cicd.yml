@@ -1,0 +1,16 @@
+name: CI/CD
+run-name: Build Images
+on: [push]
+jobs:
+  Build-And-Deploy:
+    runs-on: ubuntu-latest
+    steps:
+        - name: checking out code
+          uses: actions/checkout@v5
+        - name: build image
+          run: docker build . -t git.workshop.bteklabs.com/irul/react-app:latest
+        - name: login to docker
+          run: echo ${{secrets.BTEK_GIT_TOKEN}} | docker login --username irul --password-stdin git.workshop.bteklabs.com
+        - name: push images to registry
+          run: docker push git.workshop.bteklabs.com/irul/react-app:latest
+
